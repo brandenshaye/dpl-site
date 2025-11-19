@@ -1,4 +1,4 @@
-const MACHINE_URL = "https://dplplayoffmachine.vercel.app"; // <-- change if your URL is different
+const MACHINE_URL = "https://dpl-playoff-machine.vercel.app/";
 
 export const metadata = {
   title: "Playoff Machine | Desert Premier League",
