@@ -16,10 +16,10 @@ export default function PlayoffMachinePage() {
 
   const iframeUrl = "https://dpl-playoff-machine.vercel.app";
 
-  // MOBILE: true fullscreen experience
+  // MOBILE: true fullscreen experience with desert background
   if (isMobile) {
     return (
-      <div className="fixed inset-0 m-0 p-0 w-[100vw] max-w-[100vw] h-[100dvh] overflow-hidden bg-slate-950">
+      <div className="fixed inset-0 m-0 p-0 w-[100vw] max-w-[100vw] h-[100dvh] overflow-hidden bg-[#f4e3c3]">
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
@@ -30,13 +30,15 @@ export default function PlayoffMachinePage() {
     );
   }
 
-  // DESKTOP / TABLET: let the whole page scroll, not the iframe
+  // DESKTOP / TABLET: embedded on the desert-themed page, whole page scrolls
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
       <header className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold">DPL Playoff Machine</h1>
-          <p className="mt-1 text-sm text-slate-300">
+          <h1 className="text-2xl font-extrabold text-[#7c2d12]">
+            DPL Playoff Machine
+          </h1>
+          <p className="mt-1 text-sm text-[#4a3620]">
             Simulate the rest of the season and watch the playoff picture update
             in real time.
           </p>
@@ -51,7 +53,7 @@ export default function PlayoffMachinePage() {
         </a>
       </header>
 
-      <div className="rounded-2xl border border-white/10 bg-slate-800/40 shadow-xl overflow-hidden">
+      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl overflow-hidden">
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
