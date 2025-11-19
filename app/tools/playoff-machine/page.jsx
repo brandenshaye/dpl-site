@@ -1,50 +1,64 @@
-const MACHINE_URL = "https://dpl-playoff-machine.vercel.app/";
+// app/tools/playoff-machine/page.jsx
+"use client";
 
-export const metadata = {
-  title: "Playoff Machine | Desert Premier League",
-  description: "Simulate the DPL playoff picture and share scenarios.",
-};
+import { useEffect, useState } from "react";
 
 export default function PlayoffMachinePage() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const handleChange = () => setIsMobile(mq.matches);
+    handleChange();
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+
+  const iframeUrl = "https://dpl-playoff-machine.vercel.app";
+
+  // MOBILE: true full-screen experience
+  if (isMobile) {
+    return (
+      <div className="fixed inset-0 m-0 p-0 w-[100vw] max-w-[100vw] h-[100dvh] overflow-hidden bg-slate-950">
+        <iframe
+          src={iframeUrl}
+          title="DPL Playoff Machine"
+          className="w-[100vw] max-w-[100vw] h-[100dvh] border-0"
+          style={{ display: "block" }}
+        />
+      </div>
+    );
+  }
+
+  // DESKTOP / TABLET: framed view inside the site
   return (
-    <div className="rounded-2xl border border-white/10 overflow-hidden">
-      <div className="px-4 py-3 border-b border-white/10 bg-slate-800/60 flex items-center justify-between">
+    <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
+      <header className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold">Playoff Machine</h1>
-          <p className="text-slate-300 text-sm">
-            Pick winners to project standings and the playoff bracket.
+          <h1 className="text-2xl font-extrabold">DPL Playoff Machine</h1>
+          <p className="mt-1 text-sm text-slate-300">
+            Simulate the rest of the season and watch the playoff picture update
+            in real time.
           </p>
         </div>
         <a
-          href={MACHINE_URL}
+          href={iframeUrl}
           target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-md border border-white/15 px-3 py-1.5 text-sm hover:bg-white/5 hidden sm:inline-block"
+          rel="noreferrer"
+          className="hidden sm:inline-flex items-center rounded-full border border-red-600 bg-red-600 px-4 py-2 text-sm font-bold hover:bg-red-500"
         >
-          Open in new tab
+          Open in New Tab
         </a>
-      </div>
+      </header>
 
-      {/* Mobile-only fullscreen button */}
-      <div className="sm:hidden px-3 py-2 border-b border-white/10 bg-slate-900/60">
-        <a
-          href={MACHINE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-full items-center justify-center rounded-lg border border-white/15 px-4 py-3 font-semibold"
-        >
-          Open Fullscreen (Best on Mobile)
-        </a>
+      <div className="rounded-2xl border border-white/10 bg-slate-800/40 shadow-xl overflow-hidden">
+        <iframe
+          src={iframeUrl}
+          title="DPL Playoff Machine"
+          className="w-full h-[80dvh] border-0"
+        />
       </div>
-
-      <iframe
-        src={MACHINE_URL}
-        title="DPL Playoff Machine"
-        loading="eager"
-        allow="clipboard-read; clipboard-write; fullscreen"
-        referrerPolicy="no-referrer-when-downgrade"
-        style={{ width: "100%", height: "85dvh", border: 0, display: "block" }}
-      />
     </div>
   );
 }
