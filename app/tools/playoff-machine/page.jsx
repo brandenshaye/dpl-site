@@ -1,4 +1,3 @@
-// app/tools/playoff-machine/page.jsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ export default function PlayoffMachinePage() {
 
   const iframeUrl = "https://dpl-playoff-machine.vercel.app";
 
-  // MOBILE: true full-screen experience
+  // MOBILE: true fullscreen experience
   if (isMobile) {
     return (
       <div className="fixed inset-0 m-0 p-0 w-[100vw] max-w-[100vw] h-[100dvh] overflow-hidden bg-slate-950">
@@ -31,7 +30,7 @@ export default function PlayoffMachinePage() {
     );
   }
 
-  // DESKTOP / TABLET: framed view inside the site
+  // DESKTOP / TABLET: let the whole page scroll, not the iframe
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
       <header className="flex items-center justify-between gap-3">
@@ -46,7 +45,7 @@ export default function PlayoffMachinePage() {
           href={iframeUrl}
           target="_blank"
           rel="noreferrer"
-          className="hidden sm:inline-flex items-center rounded-full border border-red-600 bg-red-600 px-4 py-2 text-sm font-bold hover:bg-red-500"
+          className="hidden sm:inline-flex items-center rounded-full border border-amber-500 bg-amber-500 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-amber-400"
         >
           Open in New Tab
         </a>
@@ -56,7 +55,7 @@ export default function PlayoffMachinePage() {
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
-          className="w-full h-[80dvh] border-0"
+          className="w-full min-h-[1100px] border-0"
         />
       </div>
     </div>
