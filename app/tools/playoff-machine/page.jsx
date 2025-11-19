@@ -30,7 +30,8 @@ export default function PlayoffMachinePage() {
     );
   }
 
-  // DESKTOP / TABLET: embedded on the desert-themed page, whole page scrolls
+  // DESKTOP / TABLET: embedded on the desert-themed page, with a tall iframe
+  // so it feels more like part of the page instead of a small scroll window.
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
       <header className="flex items-center justify-between gap-3">
@@ -53,11 +54,11 @@ export default function PlayoffMachinePage() {
         </a>
       </header>
 
-      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl overflow-hidden">
+      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl">
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
-          className="w-full min-h-[1100px] border-0"
+          className="w-full h-[1800px] border-0"
         />
       </div>
     </div>
