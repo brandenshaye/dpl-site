@@ -4,19 +4,35 @@ import { useEffect, useState } from "react";
 
 export default function PlayoffMachinePage() {
   const [isMobile, setIsMobile] = useState(false);
+  const [iframeHeight, setIframeHeight] = useState(1800); // fallback
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const mq = window.matchMedia("(max-width: 768px)");
     const handleChange = () => setIsMobile(mq.matches);
     handleChange();
     mq.addEventListener("change", handleChange);
-    return () => mq.removeEventListener("change", handleChange);
+
+    // On desktop, make iframe ~5x viewport height
+    const updateHeight = () => {
+      if (!mq.matches) {
+        const vh = window.innerHeight || 800;
+        setIframeHeight(vh * 5); // 5x taller than the visible screen
+      }
+    };
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+
+    return () => {
+      mq.removeEventListener("change", handleChange);
+      window.removeEventListener("resize", updateHeight);
+    };
   }, []);
 
   const iframeUrl = "https://dpl-playoff-machine.vercel.app";
 
-  // MOBILE FULLSCREEN MODE
+  // MOBILE: true fullscreen experience with desert background
   if (isMobile) {
     return (
       <div className="fixed inset-0 w-[100vw] h-[100dvh] bg-[#f4e3c3] overflow-hidden">
@@ -30,20 +46,19 @@ export default function PlayoffMachinePage() {
     );
   }
 
-  // DESKTOP MODE — SUPER TALL, NO INTERNAL SCROLL
+  // DESKTOP / TABLET: very tall iframe, no internal scrollbars
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
-
       <header className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-extrabold text-[#7c2d12]">
             DPL Playoff Machine
           </h1>
           <p className="mt-1 text-sm text-[#4a3620]">
-            Simulate the rest of the season and watch the playoff picture update in real time.
+            Simulate the rest of the season and watch the playoff picture update
+            in real time.
           </p>
         </div>
-
         <a
           href={iframeUrl}
           target="_blank"
@@ -59,5 +74,13 @@ export default function PlayoffMachinePage() {
           src={iframeUrl}
           title="DPL Playoff Machine"
           className="w-full border-0"
+          scrolling="no" // hide iframe scrollbars
           style={{
-            height: "9000px", // 5x taller than bef
+            height: `${iframeHeight}px`,
+            display: "block",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
