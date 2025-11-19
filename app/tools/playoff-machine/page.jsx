@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 export default function PlayoffMachinePage() {
   const [isMobile, setIsMobile] = useState(false);
-  const [iframeHeight, setIframeHeight] = useState(1800); // fallback
 
+  // Detect mobile vs desktop
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -14,73 +14,36 @@ export default function PlayoffMachinePage() {
     handleChange();
     mq.addEventListener("change", handleChange);
 
-    // On desktop, make iframe ~5x viewport height
-    const updateHeight = () => {
-      if (!mq.matches) {
-        const vh = window.innerHeight || 800;
-        setIframeHeight(vh * 5); // 5x taller than the visible screen
-      }
-    };
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+
+  // 🔒 Lock page scrolling so only the embedded app scrolls
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     return () => {
-      mq.removeEventListener("change", handleChange);
-      window.removeEventListener("resize", updateHeight);
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
     };
   }, []);
 
   const iframeUrl = "https://dpl-playoff-machine.vercel.app";
 
-  // MOBILE: true fullscreen experience with desert background
-  if (isMobile) {
-    return (
-      <div className="fixed inset-0 w-[100vw] h-[100dvh] bg-[#f4e3c3] overflow-hidden">
-        <iframe
-          src={iframeUrl}
-          title="DPL Playoff Machine"
-          className="w-full h-full border-0"
-          style={{ display: "block" }}
-        />
-      </div>
-    );
-  }
-
-  // DESKTOP / TABLET: very tall iframe, no internal scrollbars
+  // ✅ MOBILE + DESKTOP: same idea — fullscreen iframe, desert bg, page scroll locked
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
-      <header className="flex items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-extrabold text-[#7c2d12]">
-            DPL Playoff Machine
-          </h1>
-          <p className="mt-1 text-sm text-[#4a3620]">
-            Simulate the rest of the season and watch the playoff picture update
-            in real time.
-          </p>
-        </div>
-        <a
-          href={iframeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="hidden sm:inline-flex items-center rounded-full border border-amber-500 bg-amber-500 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-amber-400"
-        >
-          Open in New Tab
-        </a>
-      </header>
-
-      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl overflow-visible">
-        <iframe
-          src={iframeUrl}
-          title="DPL Playoff Machine"
-          className="w-full border-0"
-          scrolling="no" // hide iframe scrollbars
-          style={{
-            height: `${iframeHeight}px`,
-            display: "block",
-          }}
-        />
-      </div>
+    <div className="fixed inset-0 w-[100vw] h-[100vh] bg-[#f4e3c3]">
+      <iframe
+        src={iframeUrl}
+        title="DPL Playoff Machine"
+        className="w-full h-full border-0"
+        style={{ display: "block" }}
+      />
     </div>
   );
 }
