@@ -16,34 +16,34 @@ export default function PlayoffMachinePage() {
 
   const iframeUrl = "https://dpl-playoff-machine.vercel.app";
 
-  // MOBILE: true fullscreen experience with desert background
+  // MOBILE FULLSCREEN MODE
   if (isMobile) {
     return (
-      <div className="fixed inset-0 m-0 p-0 w-[100vw] max-w-[100vw] h-[100dvh] overflow-hidden bg-[#f4e3c3]">
+      <div className="fixed inset-0 w-[100vw] h-[100dvh] bg-[#f4e3c3] overflow-hidden">
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
-          className="w-[100vw] max-w-[100vw] h-[100dvh] border-0"
+          className="w-full h-full border-0"
           style={{ display: "block" }}
         />
       </div>
     );
   }
 
-  // DESKTOP / TABLET: embedded on the desert-themed page, with a tall iframe
-  // so it feels more like part of the page instead of a small scroll window.
+  // DESKTOP MODE — SUPER TALL, NO INTERNAL SCROLL
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-4">
+
       <header className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-extrabold text-[#7c2d12]">
             DPL Playoff Machine
           </h1>
           <p className="mt-1 text-sm text-[#4a3620]">
-            Simulate the rest of the season and watch the playoff picture update
-            in real time.
+            Simulate the rest of the season and watch the playoff picture update in real time.
           </p>
         </div>
+
         <a
           href={iframeUrl}
           target="_blank"
@@ -54,13 +54,10 @@ export default function PlayoffMachinePage() {
         </a>
       </header>
 
-      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl">
+      <div className="rounded-2xl border border-[rgba(68,54,32,0.28)] bg-[#22221c] shadow-xl overflow-visible">
         <iframe
           src={iframeUrl}
           title="DPL Playoff Machine"
-          className="w-full h-[1800px] border-0"
-        />
-      </div>
-    </div>
-  );
-}
+          className="w-full border-0"
+          style={{
+            height: "9000px", // 5x taller than bef
